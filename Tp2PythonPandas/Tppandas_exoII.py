@@ -100,7 +100,10 @@ def foncB(x):
         print(df_city[df_city['CODGEO']==i]['NBPERSMENFISC16'].describe().rename(i))
 foncB(x)
 '''
-s= df_city.groupby('LIBGEO')
+s= df_city['NBPERSMENFISC16'].copy().astype(float)
 print(s)
+print(df_city[s >100000]['LIBGEO'])
 
-print(df_city[ >100000]['LIBGEO'])
+s= df_city['LIBGEO'].copy()
+print(df_city[s == 'Montreuil'])
+print(df_city[s == 'Saint-Denis'])

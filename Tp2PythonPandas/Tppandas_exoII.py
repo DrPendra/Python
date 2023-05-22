@@ -71,28 +71,36 @@ print(30*'*')
 
 print('---Exercice B---')
 
-uniondf=pd.concat([df, df_city])
-
-'''
-@jit(target_backend='cuda')
-def foncb(uniondf):
-    for i in range(0, len(uniondf.axes[1])):
-        for j in range(2, len(uniondf.axes[0])):
-            if type(uniondf.iloc[j, i]) != type(0.0):
-                uniondf.iloc[j, i] = 0.0
-            uniondf.iloc[j, i] = float(uniondf.iloc[j, i])
-    print(uniondf)
-foncb(uniondf)
-'''
-print(uniondf)
-print(uniondf.shape)
+df.replace(np.nan, 0.0, inplace=True)
+df_copy=df.copy()
+df_copy.drop(columns='INSEE commune',inplace=True)
+df_copy.drop(columns='Commune',inplace=True)
+df_copy.replace(np.nan, 0.0, inplace=True)
+print(df_copy.astype(float))
 print(df.shape)
+df_city.replace(np.nan, 0.0, inplace=True)
+dfc_copy=df_city.copy()
+dfc_copy.drop(columns='CODGEO',inplace=True)
+dfc_copy.drop(columns='LIBGEO',inplace=True)
+print(dfc_copy.astype(float))
 print(df_city.shape)
-res=uniondf.groupby('INSEE commune').nunique()
+res=df.groupby('INSEE commune').nunique()
 print(res)
 res2=df_city.groupby('LIBGEO').nunique()
 print(res2)
-res3=res2
-obs= res3[(df_city['CODGEO']>1)].count()
-print(res3)
-print(res2.sort_value(ascending=True))
+#Oui, elles sont coherent car si on prend les noms des communes, les grandes villes française peuvent avoir plusieur cod postal
+s= df_city.groupby('LIBGEO')['CODGEO'].transform('nunique').rename('Unique counts')
+x = df_city[s > 1]['CODGEO']
+print(x)
+print(x.astype(str).sort_values(ascending=True))
+'''
+@jit(target_backend='cuda')
+def foncB(x):
+    for i in x:
+        print(df_city[df_city['CODGEO']==i]['NBPERSMENFISC16'].describe().rename(i))
+foncB(x)
+'''
+s= df_city.groupby('LIBGEO')
+print(s)
+
+print(df_city[ >100000]['LIBGEO'])

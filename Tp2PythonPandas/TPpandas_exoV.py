@@ -17,16 +17,10 @@ meta.loc[meta['label'].str.contains(r"Filosofi.*2016")]
 emissions=df.iloc[:,2:].copy().sum(axis=1)
 print(emissions)
 copy=df_city.replace(to_replace=np.nan, value=float(0), regex=True)
-'''
-#copy=copy.replace(to_replace=, value=float(0), regex=True)
-print(copy)
-print(np.where(copy == r'.'))
-cadrage=copy.iloc[:,2:].copy().sum(axis=1)
-print(cadrage)
-#print(emissions.describe())
-#print(cadrage.describe())
-#gauche=emissions.left(cadrage)
-'''
+df_c=df.insert(column='emissions', value=emissions,loc='INSEE commune')
+#left=emissions.join(df, how='left')
+inner=df_c.join(copy, how='inner')
+inner.replace(to_replace=np.nan, value=float(0), regex=True)
+inner.plot(kind="bar", x='NBPERSMENFISC16', y='emissions')
 
-inner=df.join(df_city, how='inner')
-inneremission=inner.groupby('Commune')
+

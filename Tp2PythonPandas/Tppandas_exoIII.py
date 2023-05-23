@@ -26,17 +26,23 @@ for i in range(len(dep2)):
     dep2[i]= dep2[i][0:2]
 df_city.insert(0, 'departement',  dep2)
 print(df_city)
-df_log = df.groupby(['departement']).sum()
+df_log = df.groupby(['departement'], as_index=False).sum()
 print(df_log)
 df_log2=df_city.groupby(['departement']).sum()
 print(df_log2)
-plt.figure()
-#plt.bar( df_log.loc['departement'][:5], df_log.loc['Tertiaire'][:5])
-print(df_log.sort_values('Tertiaire')[:10])
-print(df_log.sort_values('Tertiaire')[-5:])
+df_logd=df_log.drop('INSEE commune', axis=1)
+df_logd.drop('Commune', axis=1, inplace=True)
+df_logd.plot(kind="bar", x='departement', y='Tertiaire')
+print(df_log.sort_values('Tertiaire',ascending=False)[:10])
+print(df_log.sort_values('Tertiaire',ascending=False)[-5:])
 
 print('---Exercice B---')
 import timeit
 
 df_copy=df_city.copy()
 df_copy2=df.copy()
+dep= df["INSEE commune"].copy()
+for i in range(len(dep)):
+    dep[i]= dep[i][0:2]
+
+#df_copy2.drop(df_copy2.index(dep), inplace=True)

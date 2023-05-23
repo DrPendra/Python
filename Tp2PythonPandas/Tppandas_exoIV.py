@@ -26,3 +26,10 @@ print(df_wide.iloc[:,2:].sum().max())
 print('---Exercice B---')
 
 df_wide = df.copy()
+df_long=df.copy()
+df_long.drop('INSEE commune', inplace=True, axis=1)
+df_long.drop('Commune', inplace=True, axis=1)
+#df_long.astype(dtype=np.long)
+dep= df["INSEE commune"].copy()
+for i in range(len(dep)):
+    dep[i]= dep[i][0:2]

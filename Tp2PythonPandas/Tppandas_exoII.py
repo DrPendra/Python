@@ -28,7 +28,7 @@ print(pd.concat([df[:10], df[:10].sample(frac=1),
                  df[:10].sample(frac=1),df[:10].sample(frac=1),
                  df[:10].sample(frac=1),df[:10].sample(frac=1)]))
 print(30*'*')
-df2=df[:7]
+df2=df[:6]
 print(30*'*')
 print(df2.sample(frac=0.5))
 @jit(target_backend='cuda')
@@ -58,11 +58,6 @@ print(30*'*')
 df2_city=df_city[:7]
 print(30*'*')
 print(df2_city.sample(frac=0.5))
-@jit(target_backend='cuda')
-def foncA(df2):
-    for i in range(99):
-        print(30 * '*')
-        print(df2.sample(frac=0.8))
 foncA(df2_city)
 
 print(30*'*')
@@ -73,16 +68,16 @@ print('---Exercice B---')
 
 df.replace(np.nan, 0.0, inplace=True)
 df_copy=df.copy()
-df_copy.drop(columns='INSEE commune',inplace=True)
-df_copy.drop(columns='Commune',inplace=True)
+#df_copy.drop(columns='INSEE commune',inplace=True)
+#df_copy.drop(columns='Commune',inplace=True)
 df_copy.replace(np.nan, 0.0, inplace=True)
-print(df_copy.astype(float))
+print(df_copy.iloc[:, 2:].astype(float))
 print(df.shape)
 df_city.replace(np.nan, 0.0, inplace=True)
 dfc_copy=df_city.copy()
-dfc_copy.drop(columns='CODGEO',inplace=True)
-dfc_copy.drop(columns='LIBGEO',inplace=True)
-print(dfc_copy.astype(float))
+#dfc_copy.drop(columns='CODGEO',inplace=True)
+#dfc_copy.drop(columns='LIBGEO',inplace=True)
+print(dfc_copy.iloc[:, 2:].astype(float))
 print(df_city.shape)
 res=df.groupby('INSEE commune').nunique()
 print(res)
@@ -93,13 +88,13 @@ s= df_city.groupby('LIBGEO')['CODGEO'].transform('nunique').rename('Unique count
 x = df_city[s > 1]['CODGEO']
 print(x)
 print(x.astype(str).sort_values(ascending=True))
-'''
+
 @jit(target_backend='cuda')
 def foncB(x):
     for i in x:
         print(df_city[df_city['CODGEO']==i]['NBPERSMENFISC16'].describe().rename(i))
 foncB(x)
-'''
+
 s= df_city['NBPERSMENFISC16'].copy().astype(float)
 print(s)
 print(df_city[s >100000]['LIBGEO'])

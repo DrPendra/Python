@@ -35,3 +35,4 @@ for i in range(len(dep)):
     dep[i]= dep[i][0:2]
 f=df_wide.iloc[:,2:].sum(axis=1)
 print(df_wide['Commune']+'    '+str(f))
+print(f.describe())

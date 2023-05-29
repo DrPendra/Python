@@ -55,6 +55,8 @@ def insertion(e,t,n):
     i=0
     while t[i]<e:
         i+=1
+        if i == n :
+            break
     t1=t[:i]
     t2=[e]
     t3=t[i:n]
@@ -79,9 +81,8 @@ def tri_insertion(t):
         t1 = t[:i]
         t2 = t[i]
         t3 = t[i+1:len(t)]
-        t4=t1+t3
-        t4=insertion(t2, t4, n-1)
-    return t4
+        t=insertion(t2, t1+t3, n-1)
+    return t
 
 if __name__ == "__main__":
 
